@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kadoku – Dompet & Ikat Pinggang Kulit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F3EE;--surface:#FFFFFF;--ink:#2A1D17;--muted:#7A6B62;--line:#E3DCD2;--brass:#9C7A32;--green:#1F3B35;--on-green:#F6F3EE;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17110E;--surface:#221913;--ink:#F1EAE0;--muted:#A99B8F;--line:#3A2E26;--brass:#C9A55A;--green:#C9A55A;--on-green:#17110E}}
+:root[data-theme="dark"]{--bg:#17110E;--surface:#221913;--ink:#F1EAE0;--muted:#A99B8F;--line:#3A2E26;--brass:#C9A55A;--green:#C9A55A;--on-green:#17110E}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:300 16px/1.65 'Jost',system-ui,sans-serif}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+header{display:flex;justify-content:space-between;align-items:center;padding:22px 0;border-bottom:1px solid var(--line)}
+.logo{font:600 30px 'Cormorant Garamond',serif;letter-spacing:.04em}
+.logo small{display:block;font:300 12px 'Jost',sans-serif;color:var(--muted);letter-spacing:.06em;margin-top:-4px}
+nav a{margin-left:24px;font-size:15px;color:var(--muted)}
+nav a:hover{color:var(--ink)}
+.hero{padding:88px 0 72px;max-width:640px}
+.hero h1{font:500 clamp(40px,7vw,68px)/1.05 'Cormorant Garamond',serif;margin:0 0 20px}
+.hero p{font-size:18px;color:var(--muted);margin:0 0 32px;max-width:480px}
+.btn{display:inline-block;background:var(--green);color:var(--on-green);padding:13px 28px;font:400 15px 'Jost',sans-serif;border-radius:2px;border:0;cursor:pointer}
+.btn:hover{opacity:.88}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+.bar{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 32px}
+.chip{background:none;border:1px solid var(--line);color:var(--muted);padding:8px 18px;border-radius:99px;font:400 14px 'Jost',sans-serif;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+h2{font:500 36px 'Cormorant Garamond',serif;margin:0 0 20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:28px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:2px;overflow:hidden;display:flex;flex-direction:column}
+.card button{padding:0;border:0;background:none;cursor:zoom-in;display:block;width:100%}
+.card img.fit{object-fit:contain;background:var(--surface)}
+.card img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
+.info{padding:18px 20px 22px;display:flex;flex-direction:column;gap:6px;flex:1}
+.info h3{font:600 22px/1.2 'Cormorant Garamond',serif;margin:0}
+.info p{margin:0;font-size:14px;color:var(--muted)}
+.info .btn{margin-top:auto;text-align:center;padding:11px 16px;font-size:14px}
+.info .row{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+.info .row .btn{flex:1;white-space:nowrap}
+.info .row .btn.ghost{flex:0 0 auto}
+.why{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:32px;padding:80px 0;border-top:1px solid var(--line);margin-top:72px}
+.why h3{font:600 22px 'Cormorant Garamond',serif;margin:0 0 6px}
+.why p{margin:0;color:var(--muted);font-size:15px}
+#kontak{background:var(--green);color:var(--on-green);padding:72px 0;margin-top:0}
+#kontak h2{margin-bottom:8px}
+#kontak p{margin:0 0 28px;opacity:.85}
+#kontak .list{display:flex;gap:16px;flex-wrap:wrap}
+#kontak .btn{background:var(--on-green);color:var(--green)}
+#kontak .btn.ghost{background:transparent;color:var(--on-green);border:1px solid currentColor}
+footer{padding:28px 0;font-size:13px;color:var(--muted)}
+dialog{border:0;padding:0;background:transparent;max-width:min(92vw,720px)}
+dialog::backdrop{background:rgba(20,12,8,.8)}
+dialog img{width:100%;height:auto;display:block;border-radius:2px;max-height:88vh;object-fit:contain}
+@media (max-width:560px){nav a{margin-left:14px}.hero{padding:56px 0 48px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <a class="logo" href="#">Kadoku<small>by ficocot</small></a>
+  <nav><a href="#koleksi">Koleksi</a><a href="#kontak">Kontak</a></nav>
+</header>
+
+<section class="hero">
+  <h1>Detail kecil, kesan yang tak terlupakan.</h1>
+  <p>Produk kulit pilihan dengan desain elegan, kualitas terbaik, dan sentuhan sederhana untuk menemani setiap langkah Anda.</p>
+  <a class="btn" href="#koleksi">Lihat koleksi</a>
+</section>
+
+<section id="koleksi">
+  <h2>Koleksi</h2>
+  <div class="bar" role="group" aria-label="Filter kategori">
+    <button class="chip" data-f="all" aria-pressed="true">Semua</button>
+    <button class="chip" data-f="pendek" aria-pressed="false">Dompet pendek</button>
+    <button class="chip" data-f="panjang" aria-pressed="false">Dompet panjang</button>
+    <button class="chip" data-f="belt" aria-pressed="false">Ikat pinggang</button>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section class="why">
+  <div><h3>Kulit asli</h3><p>Bahan kulit dengan tekstur alami yang nyaman dipegang.</p></div>
+  <div><h3>Jahitan rapi</h3><p>Dijahit kuat agar awet dipakai setiap hari.</p></div>
+  <div><h3>Banyak slot kartu</h3><p>Muat kartu, KTP, dan uang tanpa terasa tebal.</p></div>
+  <div><h3>Siap jadi kado</h3><p>Dikemas dalam box yang pantas untuk hadiah.</p></div>
+</section>
+</div>
+
+<section id="kontak">
+  <div class="wrap">
+    <h2>Pesan atau tanya produk</h2>
+    <p>Kirim nama model yang kamu pilih, kami balas lewat WhatsApp.</p>
+    <div class="list">
+      <a class="btn" href="https://wa.me/6288290739934?text=Halo%20Kadoku%2C%20saya%20mau%20tanya%20produk." target="_blank" rel="noopener">WhatsApp +62 882-9073-9934</a>
+      <a class="btn ghost" href="tel:+6288290739934">Telepon</a>
+      <a class="btn ghost" href="mailto:fitz.ficocot@gmail.com">fitz.ficocot@gmail.com</a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><footer>© 2026 Kadoku by ficocot</footer></div>
+
+<dialog id="dlg"><img id="big" alt=""></dialog>
+
+<script>
+var P=[
+{n:"Dompet Vanrotti Hitam",c:"pendek",d:"Dompet pria bifold, kulit bertekstur, slot kartu dan tempat uang.",i:"images/produk-1.jpg"},
+{n:"Dompet Vanrotti Coklat Kulit Kayu",c:"pendek",d:"Warna coklat hangat dengan tekstur kulit menonjol dan jahitan kontras.",i:"images/produk-2.jpg"},
+{n:"Dompet Vanrotti Coklat Kulit Jeruk (B)",c:"pendek",d:"Format tegak yang ringkas dengan banyak slot kartu.",i:"images/produk-3.jpg"},
+{n:"Ikat Pinggang Kadoku",c:"belt",d:"Kulit hitam bertekstur dengan gesper logam yang kokoh.",i:"images/produk-4.jpg"},
+{n:"Dompet Adidas Hitam Panjang (B)",c:"panjang",d:"Banyak slot kartu, ada resleting dan jendela ID.",i:"images/produk-5.jpg"},
+{n:"Dompet Adidas Slim (B)",c:"panjang",d:"Dompet panjang tegak, ramping dan mudah dibawa.",i:"images/produk-6.jpg"},
+{n:"Dompet Lacoste Emblem",c:"pendek",d:"Slim dan elegan dengan emblem logam di sudut.",i:"images/produk-7.jpg"},
+{n:"Dompet Levis Coklat Vintage",c:"pendek",d:"Kulit dengan kesan antik dan jahitan oranye.",i:"images/produk-8.jpg"},
+{n:"Dompet Levis Hitam",c:"pendek",d:"Hitam klasik dengan aksen jahitan oranye yang tegas.",i:"images/produk-9.jpg"},
+{n:"Dompet Vanrotti Coklat Tua Kulit Kayu",c:"pendek",u:"11 × 8 cm",d:"Kulit asli coklat bertekstur, ruang uang luas dan banyak slot kartu.",i:"images/produk-10.jpg"},
+{n:"Dompet DC Hitam",c:"pendek",u:"11,5 × 9 cm",d:"Hitam bertekstur dengan banyak slot kartu dan ruang uang luas.",i:"images/produk-11.jpg"},
+{n:"Dompet Vanrotti Hitam (B)",c:"pendek",u:"11,5 × 9 cm",d:"Format tegak yang ringkas, kulit halus dengan emblem oval.",i:"images/produk-12.jpg"},
+{n:"Dompet Lacoste",c:"pendek",u:"11,5 × 9 cm",d:"Emblem logam di sudut, slot ID transparan dan saku resleting aman.",i:"images/produk-13.jpg",l:1},
+{n:"Dompet Vanrotti",c:"pendek",u:"11 × 8 cm",d:"Kulit asli bertekstur dengan slot ID card transparan.",i:"images/produk-14.jpg",l:1},
+{n:"Dompet Saint Bernard Hitam",c:"pendek",u:"11 × 8 cm",d:"Permukaan halus yang bersih, cocok untuk tampilan formal.",i:"images/produk-15.jpg",l:1},
+{n:"Dompet Levis Coklat Tua",c:"pendek",u:"11,5 × 9 cm",d:"Coklat tua dengan jahitan kontras dan slot kartu lengkap.",i:"images/produk-16.jpg",l:1}
+];
+var g=document.getElementById('grid'),dlg=document.getElementById('dlg'),big=document.getElementById('big');
+P.forEach(function(p,k){
+  var el=document.createElement('article');el.className='card';el.dataset.c=p.c;
+  var foto=(/^https?:/.test(location.protocol)&&!/^data:/.test(p.i))?new URL(p.i,location.href).href:'';
+  var detail='Halo Kadoku! Saya tertarik dengan produk: '+p.n+(p.u?'\nUkuran: '+p.u:'')+'\n'+p.d;
+  var msg=encodeURIComponent(detail+(foto?'\nFoto produk: '+foto:''));
+  el.innerHTML='<button type="button" aria-label="Perbesar foto '+p.n+'"><img loading="lazy"'+(p.l?' class="fit"':'')+' src="'+p.i+'" alt="'+p.n+'"></button><div class="info"><h3>'+p.n+'</h3><p>'+p.d+(p.u?'<br>Ukuran: '+p.u:'')+'</p><div class="row"><a class="btn" target="_blank" rel="noopener" href="https://wa.me/6288290739934?text='+msg+'">Pesan via WhatsApp</a></div></div>';
+  el.querySelector('button').onclick=function(){big.src=p.i;big.alt=p.n;dlg.showModal()};
+  var wa=el.querySelector('.row .btn');
+  wa.onclick=async function(e){
+    e.preventDefault();
+    wa.textContent='Menyiapkan pesanan…';
+    try{
+      if(!navigator.share||!navigator.canShare) throw new Error('Browser ini belum mendukung berbagi foto.');
+      var response=await fetch(p.i);
+      if(!response.ok) throw new Error('Foto produk tidak dapat dimuat.');
+      var blob=await response.blob();
+      var ext=(blob.type&&blob.type.indexOf('png')!==-1)?'png':'jpg';
+      var file=new File([blob],'kadoku-'+(k+1)+'.'+ext,{type:blob.type||'image/jpeg'});
+      var payload={files:[file],title:'Pesanan Kadoku',text:detail};
+      if(!navigator.canShare({files:payload.files})) throw new Error('Perangkat ini belum mendukung berbagi lampiran foto.');
+      await navigator.share(payload);
+    }catch(err){
+      if(err&&err.name==='AbortError') return;
+      if(err&&err.message&&err.message.indexOf('tidak mendukung')!==-1){
+        alert(err.message+'\n\nWhatsApp akan dibuka dengan detail produk. Foto belum terlampir.');
+      }else{
+        alert('Foto belum bisa disiapkan. Coba buka website Kadoku melalui HTTPS dan ulangi.\n\n'+(err&&err.message?err.message:''));
+      }
+      window.open(wa.href,'_blank','noopener');
+    }finally{wa.textContent='Pesan via WhatsApp'}
+  };
+  g.appendChild(el);
+});
+dlg.onclick=function(){dlg.close()};
+document.querySelectorAll('.chip').forEach(function(b){b.onclick=function(){
+  document.querySelectorAll('.chip').forEach(function(x){x.setAttribute('aria-pressed',x===b)});
+  var f=b.dataset.f;
+  document.querySelectorAll('.card').forEach(function(c){c.style.display=(f==='all'||c.dataset.c===f)?'':'none'});
+}});
+</script>
+</body>
+</html>
